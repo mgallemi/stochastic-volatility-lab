@@ -96,7 +96,7 @@ Substituting the values:
 
 E[R_i] = 3% + 1.2 × (8% − 3%)
 
-E[R_i] = 3% + 1.2 × 5% = 9%**
+E[R_i] = 3% + 1.2 × 5% = 9%
 
 The CAPM therefore predicts an expected return of **9%** for the stock.
 
