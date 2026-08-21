@@ -104,7 +104,7 @@ $$
 
 The CAPM therefore predicts an expected return of **9%** for the stock.
 
-**Key idea:** Higher systematic risk ($\beta$) requires a higher expected return.
+**Key idea:** Higher systematic risk ($\beta$) requires a higher expected return..
 
 ## Sharpe Ratio
 
