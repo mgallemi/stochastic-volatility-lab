@@ -87,7 +87,11 @@ where:
 **Example:** Suppose the risk-free rate is **3%**, the expected market return is **8%**, and a stock has a beta of **1.2**:
 
 $$
-E[R_i] = 3\% + 1.2(8\%-3\%) = 9\%
+E[R_i] = 3\% + 1.2(8\%-3\%)
+$$
+
+$$
+= 3\% + 1.2(5\%) = 3\% + 6\% = 9\%
 $$
 
 The CAPM therefore predicts an expected return of **9%** for the stock.
