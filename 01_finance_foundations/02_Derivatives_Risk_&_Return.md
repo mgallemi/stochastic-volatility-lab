@@ -1,8 +1,10 @@
 # Finance Foundations — Derivatives, Risk & Return
 
-### Underlying Asset
+Asset (activo): anything with economic value that you own or invest in.
 
-The **underlying asset** is the asset whose value determines the price of a derivative.
+### Underlying Asset (activo subyacente)
+
+The **underlying asset** is the asset whose value determines the price of a derivative, to put it differently, an asset that a derivative is based on.
 
 **Example:** In a call option on Apple stock, the **Apple stock is the underlying asset** and the option is the derivative.
 

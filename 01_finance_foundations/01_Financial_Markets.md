@@ -38,7 +38,7 @@ A 10-year bond issued in 2026 matures in 2036.
 
 ---
 
-## Yield
+## Yield (Rentabilidad / rendimiento)
 
 Yield is the return an investor earns from an investment, commonly expressed as an annual percentage.
 
