@@ -158,3 +158,64 @@ The corresponding realised volatility is:
 $$
 \sqrt{0.0018} \approx 4.24\%
 $$
+
+## Arbitrage
+
+**Arbitrage** is earning a **risk-free profit** from a price difference, usually without investing any money.
+
+**Example:**  
+A stock costs **€100** on one market and **€102** on another.
+
+- Buy for €100.
+- Sell for €102.
+- Risk-free profit = **€2**.
+
+Arbitrage opportunities tend to disappear quickly as traders exploit them.
+
+---
+
+## Portfolio
+
+A **portfolio** is a combination of financial assets or instruments held together.
+
+**Example:**  
+A portfolio could contain:
+
+- 50% stocks
+- 30% bonds
+- 20% options
+
+A portfolio can also be constructed to **replicate the payoff of a derivative**.
+
+---
+
+## No-Arbitrage Principle
+
+If two portfolios have the **same future payoff**, they should have the **same price today**.
+
+**Example:**
+
+| At maturity | Portfolio Φ | Derivative D |
+|---|---:|---:|
+| Market rises | €120 | €120 |
+| Market falls | €70 | €70 |
+
+If:
+
+$$
+Price(\Phi) = €95
+$$
+
+but
+
+$$
+Price(D) = €100
+$$
+
+you could **buy Φ and sell D**, making a risk-free **€5 profit**.
+
+Therefore:
+
+> **Same payoff → same price.**
+
+This **no-arbitrage principle** is fundamental to derivative pricing.

@@ -17,3 +17,6 @@ Building the basic financial intuition needed for quantitative finance.
 - Diversification
 - CAPM
 - Realised variance
+- Arbitrage
+- Portfolio
+- No-arbitrage principle
