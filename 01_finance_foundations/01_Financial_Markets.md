@@ -51,9 +51,9 @@ $$
 \text{Yield} = \frac{1,000 - 950}{950} = 5.26\%
 $$
 
-### Commodities
-
 ---
+
+### Commodities
 
 **Commodities** are physical goods that can be bought and sold, such as **oil, gold, natural gas, wheat and coffee**.
 
