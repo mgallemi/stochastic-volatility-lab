@@ -50,3 +50,11 @@ For bonds, yield depends on factors such as the bond's price, coupon and maturit
 $$
 \text{Yield} = \frac{1,000 - 950}{950} = 5.26\%
 $$
+
+### Commodities
+
+---
+
+**Commodities** are physical goods that can be bought and sold, such as **oil, gold, natural gas, wheat and coffee**.
+
+**Example:** The price of oil is determined by supply and demand and can be traded directly or through derivatives such as futures.
