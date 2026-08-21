@@ -15,3 +15,4 @@ Building the basic financial intuition needed for quantitative finance.
 - Volatility
 - Sharpe ratio
 - Diversification
+- CAPM
