@@ -16,3 +16,4 @@ Building the basic financial intuition needed for quantitative finance.
 - Sharpe ratio
 - Diversification
 - CAPM
+- Realised variance

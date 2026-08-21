@@ -129,3 +129,32 @@ A higher Sharpe ratio generally means better risk-adjusted performance.
 **Diversification** means spreading investments across different assets to reduce portfolio risk.
 
 **Example:** Investing in **10 different stocks** is generally less risky than putting all your money into one stock, because poor performance in one asset can be offset by others.
+
+## Realised Variance
+
+**Realised variance** measures how much an asset's price actually fluctuated over a period, using observed returns.
+
+Suppose you observe daily returns:
+
+- Day 1: +2%
+- Day 2: −1%
+- Day 3: +3%
+- Day 4: −2%
+
+You calculate the squared returns and add them:
+
+$$
+RV = (0.02)^2 + (-0.01)^2 + (0.03)^2 + (-0.02)^2
+$$
+
+$$
+RV = 0.0004 + 0.0001 + 0.0009 + 0.0004 = 0.0018
+$$
+
+So the **realised variance = 0.0018** for that period.
+
+The corresponding realised volatility is:
+
+$$
+\sqrt{0.0018} \approx 4.24\%
+$$
