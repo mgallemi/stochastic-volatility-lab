@@ -84,14 +84,22 @@ where:
 - $\beta_i$ = sensitivity of the asset to the market
 - $E[R_m]$ = expected market return
 
-**Example:** Suppose the risk-free rate is **3%**, the expected market return is **8%**, and a stock has a beta of **1.2**:
+**Example:** Suppose the risk-free rate is **3%**, the expected market return is **8%**, and a stock has a beta of **1.2**.
+
+The CAPM formula is:
 
 $$
-E[R_i] = 3\% + 1.2(8\%-3\%)
+E[R_i] = R_f + \beta_i(E[R_m] - R_f)
+$$
+
+Substituting the values:
+
+$$
+E[R_i] = 3\% + 1.2(8\% - 3\%)
 $$
 
 $$
-= 3\% + 1.2(5\%) = 3\% + 6\% = 9\%
+E[R_i] = 3\% + 1.2(5\%) = 3\% + 6\% = 9\%
 $$
 
 The CAPM therefore predicts an expected return of **9%** for the stock.
