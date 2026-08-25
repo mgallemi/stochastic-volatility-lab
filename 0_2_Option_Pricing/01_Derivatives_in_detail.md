@@ -59,15 +59,17 @@ A forward contract with a maturity of **3 months** settles after 3 months.
 
 ---
 
-## 4. Forward Price
+## Forward Price
 
-The **forward price** is the price agreed today for buying or selling the underlying asset at maturity.
+The **forward price** is the price agreed today for buying or selling the underlying asset at the maturity of the forward contract.
 
-For a simple non-dividend-paying asset:
+**Example:** You agree today to buy a stock for **€105** in 3 months.
 
-$$
-F_0 = S_0e^{rT}
-$$
+- Current stock price: €100
+- Forward price: €105
+- Maturity: 3 months
+
+The €105 is the **forward price**.
 
 ---
 
