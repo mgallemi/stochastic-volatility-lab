@@ -1,6 +1,7 @@
 ## Forward Contract
 
 A **long forward** is an agreement to buy an underlying asset at a fixed price $F$ at maturity $T$.
+"The forward price must equal the cost of obtaining the asset at maturity without taking market risk."
 
 At maturity, the payoff is:
 
