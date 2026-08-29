@@ -93,3 +93,50 @@ The $S_T$ terms cancel, so the final result does **not depend on the future pric
 **That's why the strategy has zero market risk.**
 
 The arbitrage opportunity exists because the forward and the replicating portfolio have **the same future payoff but different prices today**.
+
+## Model-Free Pricing and Replication
+
+### Model-Free Forward Price
+
+For a non-dividend-paying stock, the forward price is **model-free**.
+
+This means we do not need to assume how the stock price will evolve. We only use **no-arbitrage arguments** and observable quantities such as the current stock price and interest rate.
+
+The formula changes if the underlying asset provides income (e.g. **dividends**) or has costs (e.g. **commodity storage costs**).
+
+---
+
+### Static vs Dynamic Replication
+
+**Static replication:** the replicating portfolio is constructed at $t=0$ and is **not changed** before maturity.
+
+**Dynamic replication:** the portfolio must be **rebalanced over time**, changing the amounts of the underlying asset and bonds.
+
+For example, Black-Scholes uses **dynamic replication** because the number of shares needed to hedge an option changes over time.
+
+---
+
+### Put-Call Parity
+
+For a European call and put with the same strike $K$ and maturity $T$:
+
+$$
+C-P=S_0-Ke^{-rT}
+$$
+
+Why?
+
+A **long call + short put** has payoff:
+
+$$
+(S_T-K)^+-(K-S_T)^+=S_T-K
+$$
+
+This is the same payoff as:
+
+- Long the stock → $S_T$
+- Borrow $Ke^{-rT}$ today → $-K$ at maturity
+
+Therefore, by no-arbitrage, they must have the same price.
+
+**Key idea:** Put-call parity is another **model-free relationship** based on identical payoffs.
