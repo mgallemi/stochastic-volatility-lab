@@ -131,3 +131,157 @@ $$
 **Static replication:** fixed portfolio.
 
 **Dynamic replication:** continuously adjust the amount of stock and bonds to replicate the option payoff.
+
+## Risk-Neutral Pricing
+
+### 1. Discounting the portfolio
+
+We can measure the portfolio value in **today's money** by dividing it by the bond:
+
+$$
+\tilde V_t(\Phi)=\frac{V_t(\Phi)}{B_t}
+$$
+
+where $B_t=e^{rt}$.
+
+For a self-financing portfolio, the discounted value satisfies:
+
+$$
+d\tilde V_t(\Phi)=\lambda_t\,d\tilde S_t
+$$
+
+where $\tilde S_t$ is the **discounted stock price**:
+
+$$
+\tilde S_t=\frac{S_t}{B_t}
+$$
+
+Therefore:
+
+$$
+\boxed{
+\tilde V_t(\Phi)
+=
+\tilde V_0(\Phi)
++
+\int_0^t \lambda_u\,d\tilde S_u
+}
+$$
+
+The important idea is that, after discounting, the portfolio's changes come from trading the discounted stock.
+
+---
+
+### 2. Complete markets
+
+Our goal is to construct a **self-financing portfolio** that has exactly the same payoff as the option:
+
+$$
+V_T(\Phi)=h(S_T)
+$$
+
+If we can do this for **every possible payoff function $h$**, the market is called **complete**.
+
+In a complete market, every derivative can theoretically be replicated by trading the available assets.
+
+For now, we assume the market is complete.
+
+---
+
+### 3. Introducing a new probability
+
+If the discounted stock price $\tilde S_t$ is a **martingale**, then the discounted portfolio value is also a martingale.
+
+But under the real-world probability $\mathbb P$, we do not necessarily have this property.
+
+So imagine there exists another probability measure $\mathbb P^*$ under which:
+
+$$
+\tilde S_t
+$$
+
+is a martingale.
+
+This probability measure is called the **risk-neutral measure**.
+
+Under this measure, the discounted option value is also a martingale.
+
+Therefore:
+
+$$
+\tilde V_t(\Phi)
+=
+\mathbb E_t^*
+\left[
+\tilde V_T(\Phi)
+\right]
+$$
+
+Since the portfolio replicates the option:
+
+$$
+V_T(\Phi)=h(S_T)
+$$
+
+we obtain:
+
+$$
+\tilde V_t(\Phi)
+=
+\mathbb E_t^*
+\left[
+e^{-rT}h(S_T)
+\right]
+$$
+
+Multiplying by $B_t=e^{rt}$:
+
+$$
+\boxed{
+V_t
+=
+e^{-r(T-t)}
+\mathbb E_t^*
+\left[
+h(S_T)
+\right]
+}
+$$
+
+### Key idea
+
+The price of a European derivative is:
+
+> **The expected payoff under the risk-neutral measure, discounted back to today.**
+
+$$
+\boxed{
+V_t=e^{-r(T-t)}\mathbb E_t^*[h(S_T)]
+}
+$$
+
+This is the foundation of **risk-neutral pricing** and leads directly to the **Black-Scholes formula**.
+
+---
+
+### Intuition
+
+Think of $\mathbb P^*$ as a **special pricing world**.
+
+We are NOT saying:
+
+> "This is how Apple will actually behave."
+
+Instead, we use a probability measure where **discounted asset prices have no drift**.
+
+This makes derivative pricing much easier:
+
+$$
+\text{Future payoff}
+\rightarrow
+\text{Risk-neutral expectation}
+\rightarrow
+\text{Discount back}
+\rightarrow
+\text{Today’s price}
+$$
