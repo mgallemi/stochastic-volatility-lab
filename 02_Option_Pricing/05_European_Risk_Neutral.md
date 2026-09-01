@@ -285,3 +285,127 @@ $$
 \rightarrow
 \text{Today’s price}
 $$
+
+## Self-Financing Portfolios
+
+A **self-financing portfolio** is a portfolio where all changes in the holdings are financed using money already inside the portfolio.
+
+For example, if we buy more shares, we pay for them by reducing the amount held in the bank account. No external money is added or withdrawn.
+
+The portfolio value is:
+
+$$
+V_t(\Phi)=\alpha_t B_t+\lambda_t S_t
+$$
+
+where:
+
+* $B_t$ = bank account
+* $S_t$ = asset price
+* $\alpha_t$ = amount held in the bank account
+* $\lambda_t$ = number of units of the asset
+
+### Discounted Portfolio
+
+To express values in today's money, we discount by the bank account:
+
+$$
+\tilde V_t=\frac{V_t}{B_t},
+\qquad
+\tilde S_t=\frac{S_t}{B_t}
+$$
+
+For a self-financing portfolio:
+
+$$
+d\tilde V_t=\lambda_t\,d\tilde S_t
+$$
+
+This means that, after discounting, changes in the portfolio come from changes in the asset price.
+
+---
+
+## Replication and Complete Markets
+
+To price a derivative with payoff $h(S_T)$, we try to construct a self-financing portfolio $\Phi$ such that:
+
+$$
+V_T(\Phi)=h(S_T)
+$$
+
+Such a portfolio is called a **replicating portfolio**.
+
+By the **no-arbitrage principle**, if the portfolio and the derivative have the same payoff at maturity, they must have the same price today.
+
+A market is **complete** if every possible payoff can be replicated by a self-financing portfolio.
+
+---
+
+## Risk-Neutral Pricing
+
+If the discounted asset price $\tilde S_t$ is a **martingale** under some equivalent probability measure $P^*$, then the discounted value of a self-financing replicating portfolio is also a martingale.
+
+The measure $P^*$ is called the **risk-neutral measure**.
+
+It is not necessarily the real-world probability. It is a probability measure used for pricing under the no-arbitrage framework.
+
+This leads to the risk-neutral pricing formula:
+
+$$
+\boxed{
+V_t=e^{-r(T-t)}\mathbb{E}_t^*[h(S_T)]
+}
+$$
+
+In words:
+
+> **Derivative price today = risk-neutral expected payoff at maturity, discounted back to today.**
+
+### Simple Example
+
+A call option has:
+
+* $S_0=100$
+* $K=100$
+* $T=1$
+* $S_T=120$ or $80$
+* Risk-neutral probability = 50% for each outcome
+
+The payoff is:
+
+$$
+h(S_T)=(S_T-K)^+
+$$
+
+So the possible payoffs are €20 and €0.
+
+Therefore:
+
+$$
+\mathbb{E}^*[h(S_T)]
+=
+0.5(20)+0.5(0)
+=10
+$$
+
+If $r=5%$:
+
+$$
+V_0=e^{-0.05}(10)\approx9.51
+$$
+
+So the option is worth approximately **€9.51 today**.
+
+### Key Idea
+
+**Replication + no arbitrage + martingale pricing**
+
+$$
+\text{Replicate payoff}
+\rightarrow
+\text{Discount}
+\rightarrow
+\text{Risk-neutral expectation}
+\rightarrow
+\text{Derivative price}
+$$
