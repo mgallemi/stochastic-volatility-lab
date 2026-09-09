@@ -83,4 +83,116 @@ $$
 \text{Dynamic hedging}
 $$
 
-Later, we can go one step further and **simulate stock paths and actually rebalance the delta hedge in Python**. That would make the replication idea much more tangible.
+Later, we can go one step further and **simulate stock paths and actually rebalance the delta hedge in Python**. That would make the replication idea much more tangible. 
+
+4. Why Is Delta Important for Hedging?
+
+This is where the previous mathematical theory becomes concrete.
+
+Suppose we have sold one call option.
+
+The option has delta:
+
+$$
+\Delta=0.637.
+$$
+
+To replicate the option locally, we would hold approximately 0.637 shares of the stock.
+
+If the stock moves, however, the option's delta changes.
+
+For example:
+
+Stock price        Call delta
+€80                lower
+€90                lower
+€100               ≈ 0.637
+€110               higher
+€120               higher
+
+Therefore, we cannot simply buy 0.637 shares once and leave the portfolio unchanged.
+
+We need to recalculate delta and adjust the number of shares.
+
+That is dynamic delta hedging.
+
+5. Seeing Delta Change
+
+We can let Python calculate the option price and delta for different stock prices:
+
+stock_prices = np.linspace(80, 120, 9)
+
+for S in stock_prices:
+    price, delta = black_scholes_call(S, K, r, sigma, T)
+
+    print(
+        f"S = €{S:.0f} | "
+        f"Call = €{price:.2f} | "
+        f"Delta = {delta:.3f}"
+    )
+
+You should see that:
+
+when the stock price is low, the call is less sensitive to the stock;
+as the stock price increases, the delta increases;
+the option price also increases.
+
+The important relationship is:
+
+$$
+\boxed{\Delta=\frac{\partial C}{\partial S}}
+$$
+
+Delta is therefore the sensitivity of the option price to the underlying price.
+
+It is also the number of shares used in the replicating portfolio.
+
+These are two ways of looking at exactly the same quantity.
+
+6. Connecting Everything
+
+We can now see the full story:
+
+$$
+V_t=f(t,S_t)
+$$
+
+The option price depends on the current state of the market.
+
+Using Itô's formula, we can describe how $V_t$ changes as $S_t$ moves.
+
+The derivative
+
+$$
+\frac{\partial f}{\partial S}
+$$
+
+gives the delta.
+
+Delta tells us how much of the underlying asset is needed in the replicating portfolio.
+
+Because delta changes over time, we dynamically rebalance the portfolio.
+
+The no-arbitrage condition then forces $f$ to satisfy the Black-Scholes PDE.
+
+Solving that PDE gives the Black-Scholes formula, which we can finally implement in Python.
+
+$$
+\boxed{
+\text{Stock model}
+\rightarrow
+\text{Itô}
+\rightarrow
+\text{Delta}
+\rightarrow
+\text{Dynamic replication}
+\rightarrow
+\text{PDE}
+\rightarrow
+\text{Black-Scholes price}
+}
+$$
+
+The Python implementation lets us evaluate the final formula and experiment with how the option price and delta change when we change $S$, $K$, $r$, $\sigma$, or $T$.
+
+The next natural step is to simulate the stock price through time and actually update the delta of the option at each time step. This turns the mathematical idea of dynamic replication into an actual Python simulation.
