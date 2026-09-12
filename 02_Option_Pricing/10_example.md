@@ -415,3 +415,235 @@ They are **two perspectives on the same no-arbitrage model**.
 
 > The Black-Scholes price tells us what the option should cost, while the delta tells us how to construct the stock position needed to hedge or replicate it.
 
+
+## Python Example — Black-Scholes with the S&P 500
+
+So far, we used an abstract stock with $S=100$. Now let's use a more realistic underlying: the **S&P 500 index**.
+
+Suppose we want to estimate the theoretical price of a European call option on the S&P 500.
+
+The Black-Scholes model does not require the underlying to be an individual company. We can use an index level as $S$ as well.
+
+### 1. Example Setup
+
+Suppose the S&P 500 is currently at:
+
+$$
+S_0=5,500
+$$
+
+and we consider a European call with:
+
+$$
+K=5,500
+$$
+
+so the option is **at-the-money**.
+
+Assume:
+
+* Risk-free rate: $r=4%$
+* Volatility: $\sigma=18%$
+* Time to maturity: $T=0.5$ years
+
+We can use the same Black-Scholes function:
+
+```python
+import numpy as np
+from scipy.stats import norm
+
+
+def black_scholes_call(S, K, r, sigma, T):
+
+    d1 = (
+        np.log(S / K) + (r + 0.5 * sigma**2) * T
+    ) / (sigma * np.sqrt(T))
+
+    d2 = d1 - sigma * np.sqrt(T)
+
+    price = (
+        S * norm.cdf(d1)
+        - K * np.exp(-r * T) * norm.cdf(d2)
+    )
+
+    delta = norm.cdf(d1)
+
+    return price, delta
+
+
+# S&P 500 example
+S = 5500
+K = 5500
+r = 0.04
+sigma = 0.18
+T = 0.5
+
+price, delta = black_scholes_call(S, K, r, sigma, T)
+
+print(f"Call price: {price:.2f} index points")
+print(f"Delta: {delta:.3f}")
+```
+
+The result is approximately:
+
+```text
+Call price: 294.85 index points
+Delta: 0.584
+```
+
+### 2. What Does This Mean?
+
+The theoretical Black-Scholes price is approximately:
+
+$$
+C_0\approx294.85
+$$
+
+**S&P 500 index points**.
+
+The delta is approximately:
+
+$$
+\Delta\approx0.584.
+$$
+
+So, locally, if the S&P 500 increases by 1 index point, the option price increases by approximately:
+
+$$
+0.584
+$$
+
+index points.
+
+For example, if the S&P 500 moves from
+
+$$
+5500\rightarrow5501,
+$$
+
+the option price would increase by approximately:
+
+$$
+\Delta C\approx0.584\times1=0.584.
+$$
+
+Again, this is only a **local approximation** because delta changes as the index moves.
+
+### 3. What Happens If the S&P 500 Moves?
+
+We can see how both the option price and delta change:
+
+```python
+sp500_levels = np.arange(4500, 6501, 250)
+
+for S in sp500_levels:
+
+    price, delta = black_scholes_call(
+        S, K, r, sigma, T
+    )
+
+    print(
+        f"S&P 500: {S:.0f} | "
+        f"Call: {price:.2f} | "
+        f"Delta: {delta:.3f}"
+    )
+```
+
+Conceptually, we expect:
+
+$$
+S\uparrow
+\quad\Rightarrow\quad
+C\uparrow
+$$
+
+and
+
+$$
+S\uparrow
+\quad\Rightarrow\quad
+\Delta\uparrow.
+$$
+
+When the S&P 500 is far below the strike, the call is unlikely to finish in-the-money, so its delta is relatively small.
+
+When the S&P 500 is far above the strike, the call behaves more like the underlying itself, so its delta approaches 1.
+
+Therefore:
+
+$$
+0<\Delta<1
+$$
+
+for a standard European call.
+
+### 4. A Financial Interpretation
+
+Imagine a trader has **sold the S&P 500 call**.
+
+At the beginning:
+
+$$
+\Delta\approx0.584.
+$$
+
+The trader therefore needs exposure equivalent to approximately **0.584 units of the underlying** to hedge the option's local sensitivity.
+
+If the S&P 500 rises, delta increases.
+
+If the S&P 500 falls, delta decreases.
+
+So the trader repeatedly adjusts the hedge:
+
+$$
+\boxed{
+\text{S\&P 500 moves}
+\rightarrow
+\text{delta changes}
+\rightarrow
+\text{hedge is adjusted}
+}
+$$
+
+This is the same dynamic replication idea we saw before, but now applied to a familiar market index.
+
+### 5. One Important Real-World Detail
+
+The example above is a **simplified Black-Scholes model**.
+
+For an actual S&P 500 option, we would need to consider details such as:
+
+* dividends paid by the companies in the index;
+* the actual risk-free rate;
+* the market-implied volatility;
+* the exact maturity;
+* whether the option is European or American.
+
+In particular, for an index that pays dividends, the standard formula is adjusted using the dividend yield $q$:
+
+$$
+C=S_0e^{-qT}N(d_1)-Ke^{-rT}N(d_2).
+$$
+
+So the simple example above is mainly useful for understanding **how the model works**, rather than producing a real market quote.
+
+### Key Idea
+
+The important thing is that the underlying can be an **index**, not only an individual stock.
+
+The same mathematical structure remains:
+
+$$
+\boxed{
+S_0
+\rightarrow
+\text{Black-Scholes}
+\rightarrow
+C_0,\Delta
+\rightarrow
+\text{Dynamic hedge}
+}
+$$
+
+This is one reason the Black-Scholes framework is so useful: once we understand the mathematical structure, we can apply it to many different underlying assets.
+
