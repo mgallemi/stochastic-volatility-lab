@@ -647,3 +647,37 @@ $$
 
 This is one reason the Black-Scholes framework is so useful: once we understand the mathematical structure, we can apply it to many different underlying assets.
 
+
+## Morgan Stanley Example
+
+A practical example of where quantitative finance can be applied is **Morgan Stanley's Quantitative Finance division**.
+
+For example, quantitative analysts may work on problems involving:
+
+* derivative pricing
+* risk modelling
+* statistical analysis
+* mathematical modelling
+* computational methods
+* trading and financial markets
+
+This connects directly with concepts such as **option pricing, stochastic processes, simulation and volatility modelling**.
+
+For example, a quantitative model could be used to estimate the value of an option:
+
+```python
+S = 100       # Current stock price
+K = 100       # Strike price
+r = 0.05      # Risk-free interest rate
+sigma = 0.20  # Volatility
+T = 1         # Time to maturity
+
+price, delta = black_scholes_call(S, K, r, sigma, T)
+
+print(f"Option price: {price:.2f}")
+print(f"Delta: {delta:.3f}")
+```
+
+This gives a simple example of how **mathematical finance + Python** can be used in a real financial institution such as Morgan Stanley.
+
+
