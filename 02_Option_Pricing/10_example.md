@@ -681,3 +681,56 @@ print(f"Delta: {delta:.3f}")
 This gives a simple example of how **mathematical finance + Python** can be used in a real financial institution such as Morgan Stanley.
 
 
+## Morgan Stanley Example — Dynamic Hedging
+
+A quantitative finance team at a bank such as **Morgan Stanley** may use mathematical models to help price and hedge derivatives.
+
+For example, suppose a trader has sold a European call option. The option's value changes when the underlying stock price changes.
+
+The **delta** measures how sensitive the option is to the stock price:
+
+$$
+\Delta = \frac{\partial C}{\partial S}
+$$
+
+If the option has a delta of 0.60, the trader can initially hedge the position by holding approximately 0.60 shares for each option sold.
+
+```python
+S = 100
+delta = 0.60
+
+hedge = delta
+
+print(f"Stock hedge: {hedge:.2f} shares")
+```
+
+If the stock price changes, the option's delta also changes. The hedge therefore needs to be adjusted:
+
+```python
+old_delta = 0.60
+new_delta = 0.72
+
+additional_shares = new_delta - old_delta
+
+print(f"Additional shares needed: {additional_shares:.2f}")
+```
+
+The trader would need to buy an additional **0.12 shares** per option to update the hedge.
+
+This illustrates the idea of **dynamic hedging**:
+
+$$
+\text{Calculate delta}
+\rightarrow
+\text{Hold the hedge}
+\rightarrow
+\text{Stock moves}
+\rightarrow
+\text{Recalculate delta}
+\rightarrow
+\text{Rebalance}
+$$
+
+This is one of the practical connections between **Black-Scholes, derivatives, stochastic processes and quantitative finance**.
+
+
