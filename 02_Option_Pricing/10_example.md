@@ -734,3 +734,65 @@ $$
 This is one of the practical connections between **Black-Scholes, derivatives, stochastic processes and quantitative finance**.
 
 
+
+## Morgan Stanley — AI in Quantitative Finance
+
+AI and machine learning can also be applied to quantitative finance.
+
+For example, a financial institution such as **Morgan Stanley** could use machine learning to identify patterns in large financial datasets and build models for tasks such as:
+
+* predicting market variables
+* detecting unusual trading activity
+* estimating risk
+* analysing financial data
+* supporting trading and investment decisions
+
+A simple example is using a machine learning model to predict whether the next stock return will be positive or negative.
+
+```python
+import numpy as np
+from sklearn.linear_model import LogisticRegression
+
+# Example features:
+# previous day's return and volatility
+X = np.array([
+    [0.01, 0.02],
+    [-0.02, 0.03],
+    [0.015, 0.018],
+    [-0.01, 0.025],
+    [0.02, 0.019]
+])
+
+# 1 = positive return, 0 = negative return
+y = np.array([1, 0, 1, 0, 1])
+
+model = LogisticRegression()
+model.fit(X, y)
+
+# New observation
+new_data = np.array([[0.01, 0.02]])
+
+prediction = model.predict(new_data)
+
+print("Predicted direction:", prediction[0])
+```
+
+The model learns a relationship between the input variables and the historical outcomes.
+
+However, this does **not** mean that AI can reliably predict financial markets. Financial data is noisy, relationships can change over time, and a model that performs well on historical data may fail on unseen data.
+
+This creates an important connection between **AI and quantitative finance**:
+
+$$
+\text{Financial Data}
+\rightarrow
+\text{Machine Learning}
+\rightarrow
+\text{Prediction}
+\rightarrow
+\text{Risk Analysis}
+\rightarrow
+\text{Trading Decision}
+$$
+
+In quantitative finance, the challenge is therefore not simply to build a more complex model, but to determine whether the model captures a **real and robust relationship** rather than noise in the data.
