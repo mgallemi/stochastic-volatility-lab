@@ -796,3 +796,77 @@ $$
 $$
 
 In quantitative finance, the challenge is therefore not simply to build a more complex model, but to determine whether the model captures a **real and robust relationship** rather than noise in the data.
+
+
+## Asset Management — Portfolio Allocation
+
+Asset management involves managing investments on behalf of clients, such as individuals, pension funds or institutions.
+
+A quantitative approach can be used to decide how much of a portfolio to allocate to different assets.
+
+For example, suppose we have three assets:
+
+* Stock A
+* Stock B
+* Bond C
+
+We can calculate the expected return of a portfolio as:
+
+$$
+E[R_p] = \sum_{i=1}^{n} w_i E[R_i]
+$$
+
+where:
+
+* $w_i$ is the weight of asset $i$
+* $E[R_i]$ is the expected return of asset $i$
+
+For example:
+
+```python
+import numpy as np
+
+# Portfolio weights
+weights = np.array([0.40, 0.35, 0.25])
+
+# Expected annual returns
+expected_returns = np.array([0.08, 0.10, 0.04])
+
+portfolio_return = np.dot(weights, expected_returns)
+
+print(f"Expected portfolio return: {portfolio_return:.2%}")
+```
+
+The portfolio's expected return is:
+
+$$
+0.40(0.08) + 0.35(0.10) + 0.25(0.04)
+= 0.078
+$$
+
+so the expected return is **7.8%**.
+
+In practice, an asset manager would consider more than expected return. They may also analyse:
+
+* risk and volatility
+* correlations between assets
+* diversification
+* liquidity
+* market conditions
+* client objectives and constraints
+
+AI and machine learning can also be used to analyse large datasets and identify patterns that may help inform portfolio construction or risk analysis.
+
+The general idea is:
+
+$$
+\text{Data}
+\rightarrow
+\text{Risk \& Return Analysis}
+\rightarrow
+\text{Portfolio Construction}
+\rightarrow
+\text{Portfolio Management}
+$$
+
+This is one way that **mathematics, statistics, Python and AI** can connect with asset management.
