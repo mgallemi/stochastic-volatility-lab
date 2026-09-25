@@ -870,3 +870,73 @@ $$
 $$
 
 This is one way that **mathematics, statistics, Python and AI** can connect with asset management.
+
+
+## Options and Securities
+
+An **option** is a financial derivative whose value depends on an underlying security, such as a stock.
+
+For example, consider a European call option on a stock:
+
+* Stock price: $100
+* Strike price: $105
+* Maturity: 1 year
+* Volatility: 20%
+* Risk-free rate: 5%
+
+The call gives the holder the **right, but not the obligation**, to buy the stock for $105 at maturity.
+
+Its payoff is:
+
+$$
+C_T = \max(S_T-K,0)
+$$
+
+For example, if the stock finishes at $120:
+
+$$
+C_T = \max(120-105,0)=15
+$$
+
+If the stock finishes at $90:
+
+$$
+C_T = \max(90-105,0)=0
+$$
+
+We can calculate the payoff for different possible stock prices using Python:
+
+```python
+import numpy as np
+
+strike = 105
+
+stock_prices = np.array([80, 90, 100, 105, 120, 130])
+
+call_payoffs = np.maximum(stock_prices - strike, 0)
+
+for S, payoff in zip(stock_prices, call_payoffs):
+    print(f"Stock: ${S:.0f} → Call payoff: ${payoff:.0f}")
+```
+
+The important idea is that the option payoff is **non-linear**:
+
+$$
+C_T = \max(S_T-K,0)
+$$
+
+This non-linearity is why options require different pricing and risk-management techniques from simply holding the underlying security.
+
+In quantitative finance, models such as **Black-Scholes** can be used to estimate the option's fair price, while Greeks such as **Delta, Gamma and Vega** help measure its sensitivity to different risk factors.
+
+$$
+\text{Security}
+\rightarrow
+\text{Option}
+\rightarrow
+\text{Payoff}
+\rightarrow
+\text{Pricing}
+\rightarrow
+\text{Risk Management}
+$$
