@@ -940,3 +940,113 @@ $$
 \rightarrow
 \text{Risk Management}
 $$
+
+
+
+## Black-Scholes Example
+
+The **Black-Scholes model** provides a theoretical price for a European option.
+
+Consider a European call option with:
+
+* Stock price: $S_0 = 100$
+* Strike price: $K = 100$
+* Risk-free interest rate: $r = 5%$
+* Volatility: $\sigma = 20%$
+* Time to maturity: $T = 1$ year
+
+For a European call, the Black-Scholes formula is:
+
+$$
+C = S_0N(d_1)-Ke^{-rT}N(d_2)
+$$
+
+where
+
+$$
+d_1 =
+\frac{
+\ln(S_0/K)+(r+\frac{1}{2}\sigma^2)T
+}{
+\sigma\sqrt{T}
+}
+$$
+
+and
+
+$$
+d_2=d_1-\sigma\sqrt{T}
+$$
+
+Using Python:
+
+```python
+import numpy as np
+from scipy.stats import norm
+
+S = 100
+K = 100
+r = 0.05
+sigma = 0.20
+T = 1
+
+d1 = (np.log(S / K) + (r + 0.5 * sigma**2) * T) / (
+    sigma * np.sqrt(T)
+)
+
+d2 = d1 - sigma * np.sqrt(T)
+
+call_price = S * norm.cdf(d1) - K * np.exp(-r * T) * norm.cdf(d2)
+
+print(f"d1 = {d1:.4f}")
+print(f"d2 = {d2:.4f}")
+print(f"Call price = ${call_price:.2f}")
+```
+
+The result is approximately:
+
+```text
+d1 = 0.3500
+d2 = 0.1500
+Call price = $10.45
+```
+
+So, under the Black-Scholes assumptions, the theoretical price of the call is approximately **$10.45**.
+
+The model also gives the option's **Delta**:
+
+$$
+\Delta = N(d_1)
+$$
+
+```python
+delta = norm.cdf(d1)
+
+print(f"Delta = {delta:.3f}")
+```
+
+which gives approximately:
+
+```text
+Delta = 0.637
+```
+
+This means that, locally, a $1 increase in the stock price corresponds to approximately a **$0.637 increase in the option price**, assuming the other variables remain unchanged.
+
+### From theory to practice
+
+Black-Scholes connects several ideas in quantitative finance:
+
+$$
+\text{Stochastic Process}
+\rightarrow
+\text{Itô's Formula}
+\rightarrow
+\text{Dynamic Hedging}
+\rightarrow
+\text{Black-Scholes PDE}
+\rightarrow
+\text{Option Price}
+$$
+
+The model therefore provides both a **pricing framework** and a way to understand how an option can be **hedged dynamically**.
