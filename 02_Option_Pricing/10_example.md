@@ -1050,3 +1050,76 @@ $$
 $$
 
 The model therefore provides both a **pricing framework** and a way to understand how an option can be **hedged dynamically**.
+
+
+
+## Machine Learning Example
+
+**Machine learning** allows a computer to learn patterns from data instead of being explicitly programmed with every rule.
+
+For example, we can train a simple model to predict whether a stock's return will be **positive or negative** based on previous market information.
+
+We first create some example data:
+
+```python
+import numpy as np
+from sklearn.linear_model import LogisticRegression
+
+# Features:
+# [previous return, volatility]
+X = np.array([
+    [0.02, 0.15],
+    [-0.01, 0.20],
+    [0.03, 0.12],
+    [-0.02, 0.25],
+    [0.01, 0.18],
+    [0.04, 0.10]
+])
+
+# Target:
+# 1 = positive return
+# 0 = negative return
+y = np.array([1, 0, 1, 0, 1, 1])
+```
+
+We can then train a **logistic regression** model:
+
+```python
+model = LogisticRegression()
+
+model.fit(X, y)
+```
+
+The model learns a relationship between the features and the target.
+
+We can use it to make a prediction for new data:
+
+```python
+new_data = np.array([[0.02, 0.16]])
+
+prediction = model.predict(new_data)
+
+print("Predicted class:", prediction[0])
+```
+
+If the output is:
+
+```text
+Predicted class: 1
+```
+
+the model predicts a **positive return**.
+
+We can also obtain the probability of each class:
+
+```python
+probability = model.predict_proba(new_data)
+
+print(probability)
+```
+
+### Important idea
+
+The model is not given a rule such as:
+
+> "If volatil
