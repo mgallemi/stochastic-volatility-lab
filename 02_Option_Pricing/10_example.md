@@ -1123,3 +1123,119 @@ print(probability)
 The model is not given a rule such as:
 
 > "If volatil
+
+
+## Itô's Formula Applied to Black-Scholes
+
+In the Black-Scholes model, the stock price follows a stochastic process:
+
+$$
+dS_t = \mu S_t\,dt + \sigma S_t\,dW_t
+$$
+
+where:
+
+* $S_t$ is the stock price
+* $\mu$ is the expected return
+* $\sigma$ is the volatility
+* $W_t$ is a Brownian motion
+
+An option price depends on both **time** and the stock price:
+
+$$
+V_t = f(t,S_t)
+$$
+
+Because $S_t$ is stochastic, the ordinary chain rule is not sufficient. We use **Itô's Formula**.
+
+For a function $f(t,S_t)$:
+
+$$
+df =
+f_t\,dt
++
+f_S\,dS_t
++
+\frac{1}{2}f_{SS}(dS_t)^2
+$$
+
+Substituting the stock process:
+
+$$
+dS_t = \mu S_t\,dt+\sigma S_t\,dW_t
+$$
+
+and using
+
+$$
+(dW_t)^2=dt
+$$
+
+gives:
+
+$$
+df =
+\left(
+f_t
++
+\mu S_t f_S
++
+\frac{1}{2}\sigma^2S_t^2f_{SS}
+\right)dt
++
+\sigma S_t f_S\,dW_t
+$$
+
+This is important because it describes how the option price changes as the stock price evolves.
+
+### Connection with Delta
+
+The coefficient
+
+$$
+f_S
+$$
+
+is the **Delta** of the option:
+
+$$
+\Delta = \frac{\partial V}{\partial S}
+$$
+
+Therefore, Delta tells us how much the option price changes locally when the underlying stock changes.
+
+In Black-Scholes, we can construct a portfolio containing the option and the underlying stock. By choosing the number of shares appropriately, the stochastic $dW_t$ component can be eliminated.
+
+This is the key idea behind **dynamic hedging**:
+
+$$
+\text{Itô's Formula}
+\rightarrow
+\text{Delta}
+\rightarrow
+\text{Hedging}
+\rightarrow
+\text{Black-Scholes PDE}
+\rightarrow
+\text{Option Price}
+$$
+
+The resulting Black-Scholes PDE is:
+
+$$
+f_t
++
+\frac{1}{2}\sigma^2S^2f_{SS}
++
+rSf_S
+-rf
+=0
+$$
+
+with the terminal condition for a European call:
+
+$$
+f(T,S_T)=\max(S_T-K,0)
+$$
+
+Solving this PDE gives the Black-Scholes option pricing formula.
