@@ -1239,3 +1239,135 @@ f(T,S_T)=\max(S_T-K,0)
 $$
 
 Solving this PDE gives the Black-Scholes option pricing formula.
+
+## Black-Scholes as a Quantitative Finance Algorithm
+
+Black-Scholes can be viewed as a mathematical machine that transforms market inputs into an option price and its sensitivities.
+
+For a European call option, we provide:
+
+* Stock price $S$
+* Strike price $K$
+* Risk-free rate $r$
+* Volatility $\sigma$
+* Time to maturity $T$
+
+The model first calculates:
+
+$$
+d_1 =
+\frac{
+\ln(S/K)+(r+\frac{1}{2}\sigma^2)T
+}{
+\sigma\sqrt{T}
+}
+$$
+
+and
+
+$$
+d_2=d_1-\sigma\sqrt{T}
+$$
+
+Then it produces the option price:
+
+$$
+C=S N(d_1)-Ke^{-rT}N(d_2)
+$$
+
+and the Delta:
+
+$$
+\Delta=N(d_1)
+$$
+
+We can represent the process like a computational pipeline:
+
+$$
+\boxed{
+(S,K,r,\sigma,T)
+\rightarrow
+(d_1,d_2)
+\rightarrow
+(C,\Delta)
+}
+$$
+
+In Python:
+
+```python
+import numpy as np
+from scipy.stats import norm
+
+def black_scholes(S, K, r, sigma, T):
+
+    d1 = (
+        np.log(S / K)
+        + (r + 0.5 * sigma**2) * T
+    ) / (sigma * np.sqrt(T))
+
+    d2 = d1 - sigma * np.sqrt(T)
+
+    price = (
+        S * norm.cdf(d1)
+        - K * np.exp(-r * T) * norm.cdf(d2)
+    )
+
+    delta = norm.cdf(d1)
+
+    return price, delta
+```
+
+We can then feed the market information into the model:
+
+```python
+S = 100
+K = 100
+r = 0.05
+sigma = 0.20
+T = 1
+
+price, delta = black_scholes(S, K, r, sigma, T)
+
+print(f"Option price: ${price:.2f}")
+print(f"Delta: {delta:.3f}")
+```
+
+Output:
+
+```text
+Option price: $10.45
+Delta: 0.637
+```
+
+The important idea is that the model is not simply calculating a number. It provides information that can be used for **risk management and hedging**.
+
+For example, if the Delta is $0.637$, a trader hedging one short call would initially hold approximately $0.637$ shares of the underlying.
+
+If the stock price changes, the Delta changes as well:
+
+$$
+S_t \uparrow
+\quad\Rightarrow\quad
+\Delta_t \text{ changes}
+$$
+
+The trader can therefore repeatedly recalculate the Delta and adjust the hedge.
+
+This creates a feedback loop:
+
+$$
+\text{Market Data}
+\rightarrow
+\text{Black-Scholes}
+\rightarrow
+\text{Price + Greeks}
+\rightarrow
+\text{Hedge}
+\rightarrow
+\text{New Market Data}
+\rightarrow
+\text{Recalculate}
+$$
+
+This is the **quantitative and computational side of derivatives trading**: mathematical models are turned into algorithms that continuously process market information and support pricing and risk management.
