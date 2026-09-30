@@ -1371,3 +1371,322 @@ $$
 $$
 
 This is the **quantitative and computational side of derivatives trading**: mathematical models are turned into algorithms that continuously process market information and support pricing and risk management.
+
+
+# Chapter Recap — From No-Arbitrage to Black-Scholes
+
+This chapter introduced the main ideas behind **derivatives pricing and quantitative finance**, starting from basic financial instruments and gradually connecting them to mathematical modelling, stochastic calculus and computation.
+
+## 1. Financial Instruments
+
+A financial market contains different types of instruments:
+
+* **Stocks** represent ownership of a company.
+* **Bonds** represent lending money to an issuer.
+* **Forwards and futures** create obligations to buy or sell an asset in the future.
+* **Options** give the buyer the right, but not the obligation, to buy or sell an underlying asset.
+
+For a European call option, the payoff at maturity is:
+
+$$
+C_T = \max(S_T-K,0)
+$$
+
+where $S_T$ is the underlying price at maturity and $K$ is the strike price.
+
+---
+
+## 2. No-Arbitrage
+
+One of the fundamental principles of financial mathematics is **no-arbitrage**.
+
+An arbitrage opportunity is a strategy that produces a positive profit with no risk and no initial investment.
+
+The no-arbitrage principle allows us to determine relationships between financial instruments.
+
+For example, the forward price of a non-dividend-paying stock is:
+
+$$
+F_0=S_0e^{rT}
+$$
+
+The forward price is therefore determined by a **no-arbitrage relationship**, rather than being a prediction of the future stock price.
+
+---
+
+## 3. Replication
+
+The central idea is that if two portfolios produce the same future payoff, they must have the same price in a no-arbitrage market.
+
+This leads to the idea of a **replicating portfolio**.
+
+$$
+\text{Derivative Payoff}
+=
+\text{Replicating Portfolio Payoff}
+$$
+
+Therefore:
+
+$$
+\text{Derivative Price}
+=
+\text{Replicating Portfolio Price}
+$$
+
+This idea is one of the foundations of derivative pricing.
+
+---
+
+## 4. Static and Dynamic Replication
+
+A **static portfolio** is constructed once and then left unchanged.
+
+A **dynamic portfolio** must be continuously or repeatedly rebalanced.
+
+Options have nonlinear payoffs, so a simple fixed combination of stocks and bonds generally cannot reproduce their payoff for every possible stock price.
+
+Instead, the hedge can be adjusted over time.
+
+This leads to **dynamic replication**.
+
+---
+
+## 5. Put-Call Parity
+
+For European call and put options with the same strike $K$ and maturity $T$:
+
+$$
+C-P=S_0-Ke^{-rT}
+$$
+
+This relationship is another consequence of no-arbitrage.
+
+It connects the prices of calls, puts, the underlying asset and a risk-free bond.
+
+---
+
+## 6. Risk-Neutral Pricing
+
+Instead of explicitly constructing a replicating portfolio every time, we can express derivative prices using a special probability measure called the **risk-neutral measure**.
+
+Under the risk-neutral measure $\mathbb{P}^*$, discounted asset prices are martingales.
+
+The general pricing equation is:
+
+$$
+V_t
+=
+e^{-r(T-t)}
+\mathbb{E}^{*}
+\left[
+h(S_T)
+\mid \mathcal{F}_t
+\right]
+$$
+
+where $h(S_T)$ is the derivative payoff.
+
+Importantly, $\mathbb{P}^*$ is a **pricing measure**, not necessarily the real-world probability distribution of future prices.
+
+---
+
+## 7. Complete and Incomplete Markets
+
+A market is **complete** if every relevant contingent claim can be replicated.
+
+In a complete market, there is a unique risk-neutral measure.
+
+In an incomplete market, some risks cannot be perfectly hedged, so there can be multiple risk-neutral measures.
+
+This becomes particularly relevant for models with additional sources of uncertainty, such as **stochastic volatility**.
+
+---
+
+## 8. Dynamic Hedging and Delta
+
+Suppose an option has value:
+
+$$
+V_t=f(t,S_t)
+$$
+
+Its **Delta** is:
+
+$$
+\Delta_t
+=
+\frac{\partial f}{\partial S}
+$$
+
+Delta measures the sensitivity of the option price to the underlying asset.
+
+It also determines the number of shares in the local replicating portfolio.
+
+For example, if:
+
+$$
+\Delta=0.637
+$$
+
+then a small increase of $1 in the stock price corresponds approximately to an increase of $0.637 in the option price.
+
+Because Delta changes as the underlying changes, the hedge must be **rebalanced dynamically**.
+
+---
+
+## 9. Itô's Formula
+
+Because the underlying asset follows a stochastic process, the ordinary chain rule from calculus is not enough.
+
+If:
+
+$$
+V_t=f(t,S_t)
+$$
+
+then Itô's Formula gives:
+
+$$
+df
+=
+f_tdt
++
+f_SdS_t
++
+\frac{1}{2}f_{SS}(dS_t)^2
+$$
+
+For a stock following:
+
+$$
+dS_t
+=
+\mu S_tdt+\sigma S_tdW_t
+$$
+
+we use:
+
+$$
+(dW_t)^2=dt
+$$
+
+which produces the additional second-order term.
+
+This is the mathematical bridge between **stochastic processes and option pricing**.
+
+---
+
+## 10. Black-Scholes
+
+The Black-Scholes model combines the previous ideas.
+
+Starting with a stochastic model for the stock price and applying Itô's Formula to the option value, we can construct a dynamically hedged portfolio.
+
+Eliminating the stochastic component leads to the **Black-Scholes PDE**:
+
+$$
+f_t
++
+\frac{1}{2}\sigma^2S^2f_{SS}
++
+rSf_S
+-rf
+=0
+$$
+
+with the appropriate terminal payoff.
+
+For a European call:
+
+$$
+f(T,S_T)=\max(S_T-K,0)
+$$
+
+Solving the PDE gives the Black-Scholes formula:
+
+$$
+C
+=
+S_0N(d_1)
+-
+Ke^{-rT}N(d_2)
+$$
+
+where:
+
+$$
+d_1
+=
+\frac{
+\ln(S_0/K)
++
+(r+\frac{1}{2}\sigma^2)T
+}{
+\sigma\sqrt{T}
+}
+$$
+
+and:
+
+$$
+d_2=d_1-\sigma\sqrt{T}
+$$
+
+---
+
+## 11. From Mathematics to Python
+
+These mathematical models can be implemented computationally.
+
+For example:
+
+```python
+price, delta = black_scholes(
+    S=100,
+    K=100,
+    r=0.05,
+    sigma=0.20,
+    T=1
+)
+```
+
+For these parameters:
+
+$$
+C\approx10.45
+$$
+
+and:
+
+$$
+\Delta\approx0.637
+$$
+
+Python therefore becomes a way to turn the mathematical model into a computational tool for **pricing and risk analysis**.
+
+---
+
+## 12. The Bigger Picture
+
+The ideas in this chapter are connected:
+
+$$
+\boxed{
+\text{No-Arbitrage}
+\rightarrow
+\text{Replication}
+\rightarrow
+\text{Dynamic Hedging}
+\rightarrow
+\text{Itô's Formula}
+\rightarrow
+\text{Black-Scholes}
+}
+$$
+
+The main story is that **derivative pricing is not just about guessing what an option is worth**.
+
+We start with the principle that arbitrage should not exist. From this, we construct replicating strategies. When the replication must change over time, we use dynamic hedging. Because prices evolve stochastically, we need Itô's calculus. This ultimately leads to the Black-Scholes equation and, in the classical model, an explicit option-pricing formula.
+
+This provides the foundation for more advanced quantitative finance topics such as **Monte Carlo simulation, stochastic volatility, Heston models, volatility surfaces and numerical option pricing**.
