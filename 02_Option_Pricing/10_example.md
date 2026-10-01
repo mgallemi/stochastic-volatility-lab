@@ -1690,3 +1690,166 @@ The main story is that **derivative pricing is not just about guessing what an o
 We start with the principle that arbitrage should not exist. From this, we construct replicating strategies. When the replication must change over time, we use dynamic hedging. Because prices evolve stochastically, we need Itô's calculus. This ultimately leads to the Black-Scholes equation and, in the classical model, an explicit option-pricing formula.
 
 This provides the foundation for more advanced quantitative finance topics such as **Monte Carlo simulation, stochastic volatility, Heston models, volatility surfaces and numerical option pricing**.
+
+
+# Black-Scholes with Random Walks
+
+The Black-Scholes model assumes that the stock price follows a **geometric Brownian motion**:
+
+$$
+dS_t = \mu S_t\,dt + \sigma S_t\,dW_t
+$$
+
+A Brownian motion can be approximated computationally using a sequence of random steps.
+
+For a small time interval $\Delta t$:
+
+$$
+\Delta W_t = \sqrt{\Delta t}Z
+$$
+
+where:
+
+$$
+Z\sim N(0,1)
+$$
+
+This gives the discrete approximation:
+
+$$
+S_{t+\Delta t}
+=
+S_t
+\exp
+\left[
+\left(\mu-\frac{1}{2}\sigma^2\right)\Delta t
++
+\sigma\sqrt{\Delta t}Z
+\right]
+$$
+
+Each random value $Z$ creates a small random movement in the stock price.
+
+## Simulating One Stock Path
+
+```python id="q3p2hn"
+import numpy as np
+import matplotlib.pyplot as plt
+
+# Parameters
+S0 = 100
+mu = 0.05
+sigma = 0.20
+T = 1
+steps = 252
+
+dt = T / steps
+
+# Generate random shocks
+Z = np.random.normal(0, 1, steps)
+
+# Store stock prices
+S = np.zeros(steps + 1)
+S[0] = S0
+
+# Simulate the path
+for t in range(steps):
+    S[t + 1] = S[t] * np.exp(
+        (mu - 0.5 * sigma**2) * dt
+        + sigma * np.sqrt(dt) * Z[t]
+    )
+
+# Plot the path
+plt.plot(S)
+plt.xlabel("Time")
+plt.ylabel("Stock price")
+plt.title("Simulated Stock Price")
+plt.show()
+```
+
+The result is one possible trajectory of the stock price.
+
+Because the random values are different every time, running the simulation again produces a different path.
+
+## Simulating Many Paths
+
+Instead of simulating only one possible future, we can simulate thousands of possible stock-price paths.
+
+```python id="q3m5l7"
+n_paths = 10000
+
+Z = np.random.normal(0, 1, (n_paths, steps))
+
+S = np.zeros((n_paths, steps + 1))
+S[:, 0] = S0
+
+for t in range(steps):
+    S[:, t + 1] = S[:, t] * np.exp(
+        (mu - 0.5 * sigma**2) * dt
+        + sigma * np.sqrt(dt) * Z[:, t]
+    )
+```
+
+Now `S` contains **10,000 possible future stock-price paths**.
+
+We can visualize some of them:
+
+```python id="p1c4x9"
+for i in range(100):
+    plt.plot(S[i], alpha=0.2)
+
+plt.xlabel("Time")
+plt.ylabel("Stock price")
+plt.title("Simulated Stock Price Paths")
+plt.show()
+```
+
+## From Random Walks to Option Pricing
+
+Once we have simulated possible values of $S_T$, we can calculate the payoff of a European call:
+
+$$
+C_T=\max(S_T-K,0)
+$$
+
+For each simulated path:
+
+```python id="z8a6v2"
+K = 100
+
+payoffs = np.maximum(S[:, -1] - K, 0)
+
+option_price = np.exp(-r * T) * np.mean(payoffs)
+
+print(f"Estimated call price: ${option_price:.2f}")
+```
+
+This is the basic idea behind **Monte Carlo option pricing**:
+
+$$
+\boxed{
+\text{Random Walks}
+\rightarrow
+\text{Stock Price Paths}
+\rightarrow
+\text{Option Payoffs}
+\rightarrow
+\text{Average}
+\rightarrow
+\text{Discount}
+\rightarrow
+\text{Option Price}
+}
+$$
+
+The important connection is that **Black-Scholes and Monte Carlo are two different ways of approaching the same underlying stochastic model**.
+
+Black-Scholes gives an analytical formula under its assumptions:
+
+$$
+C=S_0N(d_1)-Ke^{-rT}N(d_2)
+$$
+
+while Monte Carlo approximates the price numerically by generating many possible future paths.
+
+This is an important step toward more advanced quantitative finance, where analytical formulas may no longer exist and **simulation becomes necessary**.
