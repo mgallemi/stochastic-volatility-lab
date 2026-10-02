@@ -1853,3 +1853,352 @@ $$
 while Monte Carlo approximates the price numerically by generating many possible future paths.
 
 This is an important step toward more advanced quantitative finance, where analytical formulas may no longer exist and **simulation becomes necessary**.
+
+# Volatility Surface and Black-Scholes
+
+## 1. Black-Scholes and volatility
+
+The Black-Scholes model prices a European call using:
+
+$$
+C=S_0N(d_1)-Ke^{-rT}N(d_2)
+$$
+
+where
+
+$$
+d_1=
+\frac{\ln(S_0/K)+(r+\frac{1}{2}\sigma^2)T}
+{\sigma\sqrt{T}}
+$$
+
+and
+
+$$
+d_2=d_1-\sigma\sqrt{T}.
+$$
+
+The model assumes a **constant volatility** $\sigma$.
+
+This is useful mathematically, but real option markets do not usually behave as if one volatility works for every option.
+
+---
+
+## 2. From market prices to implied volatility
+
+Suppose we observe the market price of an option.
+
+Instead of asking:
+
+> What is the option price if volatility is $\sigma$?
+
+we can ask:
+
+> What value of $\sigma$ would make Black-Scholes produce the observed market price?
+
+This value is called the **implied volatility**.
+
+Conceptually:
+
+$$
+\text{Market option price}
+\quad\longrightarrow\quad
+\text{Black-Scholes}
+\quad\longrightarrow\quad
+\text{Implied volatility}
+$$
+
+For example, suppose a market call has price €10.45.
+
+If Black-Scholes with
+
+$$
+S_0=100,\quad K=100,\quad r=5\%,\quad T=1
+$$
+
+produces €10.45 when
+
+$$
+\sigma=20\%,
+$$
+
+then the option has an implied volatility of approximately 20%.
+
+---
+
+## 3. Why implied volatility is not constant
+
+Consider several options on the same underlying:
+
+| Strike | Maturity | Implied volatility |
+| -----: | -------: | -----------------: |
+|     80 |   1 year |                25% |
+|     90 |   1 year |                22% |
+|    100 |   1 year |                20% |
+|    110 |   1 year |                21% |
+|    120 |   1 year |                24% |
+
+Black-Scholes uses one $\sigma$, but the market is effectively giving us a different implied volatility for different strikes.
+
+Therefore:
+
+$$
+\sigma=\sigma(K,T)
+$$
+
+rather than simply
+
+$$
+\sigma=\text{constant}.
+$$
+
+---
+
+## 4. The volatility smile
+
+If we fix the maturity $T$ and plot implied volatility against strike $K$, we can obtain a **volatility smile**.
+
+For example:
+
+$$
+K \rightarrow \text{implied volatility}
+$$
+
+The volatility may be higher for options far away from the current stock price and lower around the at-the-money strike.
+
+This pattern is called a **volatility smile**.
+
+In equity markets, the curve often has more of a **volatility skew** than a perfectly symmetric smile.
+
+The important idea is:
+
+> Options with different strikes can have different implied volatilities.
+
+---
+
+## 5. The volatility surface
+
+Now instead of fixing maturity, we allow both strike and maturity to vary.
+
+We obtain:
+
+$$
+\sigma_{\text{imp}}=\sigma_{\text{imp}}(K,T)
+$$
+
+This is the **implied volatility surface**.
+
+It has two main dimensions:
+
+* **Strike** $K$
+* **Time to maturity** $T$
+
+and the third dimension is:
+
+* **Implied volatility** $\sigma_{\text{imp}}$
+
+Conceptually:
+
+```text
+                    Implied volatility
+                           ↑
+                           |
+                  _________|____
+              ___/         |   \__
+          ___/              |      \__
+       __/                  |          \_
+      /_____________________|____________→ Strike
+     /
+    /
+   ↓
+ Maturity
+```
+
+The actual surface is constructed from market option prices across many strikes and maturities.
+
+---
+
+## 6. Black-Scholes vs. the volatility surface
+
+There is an important distinction.
+
+### Black-Scholes
+
+Uses:
+
+$$
+\sigma=\text{constant}
+$$
+
+and produces an option price:
+
+$$
+C_{BS}(S_0,K,r,\sigma,T).
+$$
+
+### Market
+
+Different options imply different volatilities:
+
+$$
+\sigma_{\text{imp}}=\sigma_{\text{imp}}(K,T).
+$$
+
+So Black-Scholes can be used as a **translation mechanism**:
+
+$$
+\boxed{
+\text{Option price}
+\leftrightarrow
+\text{Implied volatility}
+}
+$$
+
+The volatility surface then summarizes how the market prices volatility across strikes and maturities.
+
+---
+
+## 7. Why this matters
+
+The volatility surface is important because volatility is not directly observed in the market.
+
+We observe:
+
+* stock prices,
+* option prices,
+* strikes,
+* maturities,
+* interest rates.
+
+From option prices, we can extract implied volatilities.
+
+This gives a market-based picture of how volatility is being priced.
+
+For quantitative finance, this becomes important for:
+
+* derivatives pricing
+* volatility trading
+* risk management
+* hedging
+* model calibration
+* exotic options
+* stochastic volatility models
+
+---
+
+## 8. Connection to stochastic volatility
+
+Black-Scholes assumes:
+
+$$
+dS_t=\mu S_t\,dt+\sigma S_t\,dW_t
+$$
+
+with constant $\sigma$.
+
+Stochastic volatility models instead allow volatility itself to evolve randomly.
+
+For example, the Heston model uses:
+
+$$
+dS_t=\mu S_t\,dt+\sqrt{v_t}S_t\,dW_t^S
+$$
+
+and
+
+$$
+dv_t=\kappa(\theta-v_t)\,dt
++\xi\sqrt{v_t}\,dW_t^v.
+$$
+
+Here, volatility is no longer constant.
+
+The model can therefore generate richer behavior than Black-Scholes, including patterns related to the volatility surface.
+
+This creates the progression:
+
+$$
+\boxed{
+\text{Black-Scholes}
+\rightarrow
+\text{Implied volatility}
+\rightarrow
+\text{Volatility surface}
+\rightarrow
+\text{Stochastic volatility models}
+}
+$$
+
+---
+
+## 9. Python example
+
+We can calculate Black-Scholes prices for different volatilities:
+
+```python
+import numpy as np
+from scipy.stats import norm
+
+def black_scholes_call(S, K, r, sigma, T):
+    d1 = (
+        np.log(S / K)
+        + (r + 0.5 * sigma**2) * T
+    ) / (sigma * np.sqrt(T))
+
+    d2 = d1 - sigma * np.sqrt(T)
+
+    price = (
+        S * norm.cdf(d1)
+        - K * np.exp(-r * T) * norm.cdf(d2)
+    )
+
+    return price
+
+
+S = 100
+K = 100
+r = 0.05
+T = 1
+
+for sigma in [0.15, 0.20, 0.25, 0.30]:
+    price = black_scholes_call(S, K, r, sigma, T)
+    print(f"Volatility: {sigma:.0%} → Call price: {price:.2f}")
+```
+
+Higher volatility generally increases the value of a European call because the payoff is asymmetric:
+
+$$
+(S_T-K)^+.
+$$
+
+More uncertainty creates more opportunities for the stock to finish far above the strike, while the option holder is protected from negative outcomes below the strike.
+
+---
+
+## 10. The bigger picture
+
+The key idea is that **Black-Scholes is not the volatility surface itself**.
+
+Black-Scholes gives us a pricing formula based on an assumed volatility.
+
+The market gives us option prices.
+
+We can invert Black-Scholes to obtain implied volatility.
+
+Repeating this across many strikes and maturities gives the volatility surface.
+
+Therefore:
+
+$$
+\boxed{
+\text{Market option prices}
+\rightarrow
+\text{Implied volatilities}
+\rightarrow
+\text{Volatility surface}
+}
+$$
+
+And this motivates more advanced models such as Heston, where volatility is itself stochastic.
+
+This is one of the main bridges from classical Black-Scholes theory to modern quantitative finance.
