@@ -2202,3 +2202,5 @@ $$
 And this motivates more advanced models such as Heston, where volatility is itself stochastic.
 
 This is one of the main bridges from classical Black-Scholes theory to modern quantitative finance.
+
+Example
